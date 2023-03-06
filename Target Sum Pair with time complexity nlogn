@@ -1,0 +1,39 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+  public static void targetSumPair(int[] arr, int target){
+    //write your code here
+    Arrays.sort(arr);
+    
+    int lidx = 0;
+    int ridx = arr.length - 1;
+    
+    while(lidx < ridx){
+        if(arr[lidx] + arr[ridx] < target){
+            lidx++;
+        }
+        else if(arr[lidx] + arr[ridx] > target){
+            ridx--;
+        }
+        else{
+            System.out.println(arr[lidx] + ", " + arr[ridx]);
+            lidx++;
+            ridx--;
+        }
+    }
+
+  }
+  public static void main(String[] args) throws Exception {
+    Scanner scn = new Scanner(System.in);
+    int n = scn.nextInt();
+    int[] arr = new int[n];
+    for(int i = 0 ;i < n; i++){
+      arr[i] = scn.nextInt();
+    }
+    int target = scn.nextInt();
+    targetSumPair(arr,target);
+  }
+
+}
