@@ -1,0 +1,94 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+
+  public static void main(String[] args) throws Exception {
+    Scanner scn = new Scanner(System.in);
+    String exp = scn.nextLine();
+
+    // code
+
+    Stack <String> postfix = new Stack<>();
+    Stack <String> prefix = new Stack<>();
+    Stack <Character> operators = new Stack<>();
+
+    for (int i = 0; i < exp.length(); i++) {
+      char ch = exp.charAt(i);
+     
+      if (ch == '(') {
+        operators.push(ch);
+      }
+        
+      else if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+        postfix.push(ch + "");
+        prefix.push(ch + "");
+      }
+      
+      else if (ch == ')') {
+        while (operators.peek() != '(' && operators.size() > 0) {
+          char op = operators.pop();
+           
+          String postval2 = postfix.pop();
+          String postval1 = postfix.pop();
+          String postval = postval1 + postval2 + op;
+          postfix.push(postval);
+         
+          String preval2 = prefix.pop();
+          String preval1 = prefix.pop();
+          String preval = op + preval1 + preval2;
+          prefix.push(preval);
+        }
+        operators.pop();
+      }
+      
+      else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+        while (operators.size() > 0 && operators.peek() != '(' &&
+            precedence(ch) <= precedence(operators.peek())) {
+          char op = operators.pop();
+           
+          String postval2 = postfix.pop();
+          String postval1 = postfix.pop();
+          String postval = postval1 + postval2 + op;
+          postfix.push(postval);
+         
+          String preval2 = prefix.pop();
+          String preval1 = prefix.pop();
+          String preval = op + preval1 + preval2;
+          prefix.push(preval);
+        }
+        operators.push(ch);
+      }
+    }
+        
+        while (operators.size() > 0) {
+          char op = operators.pop();
+           
+          String postval2 = postfix.pop();
+          String postval1 = postfix.pop();
+          String postval = postval1 + postval2 + op;
+          postfix.push(postval);
+              
+          String preval2 = prefix.pop();
+          String preval1 = prefix.pop();
+          String preval = op + preval1 + preval2;
+          prefix.push(preval);
+        }
+            
+        System.out.println(postfix.peek());
+        System.out.println(prefix.peek());
+    }
+     
+    public static int precedence(char op) {
+        if (op == '+' || op == '-') {
+          return 1;
+        }
+        else if (op == '*' || op == '/') {
+          return 2;
+        }
+        else {
+          return 0;
+     }
+    }
+}
