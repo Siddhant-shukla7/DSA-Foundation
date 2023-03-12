@@ -1,0 +1,63 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+
+  public static void main(String[] args) throws Exception {
+    Scanner scn = new Scanner(System.in);
+    String exp = scn.nextLine();
+
+    // code
+
+    Stack <String> infix = new Stack<>();
+    Stack <String> prefix = new Stack<>();
+    Stack <Integer> valuestack = new Stack<>();
+
+    for (int i = 0; i < exp.length(); i++) {
+      char ch = exp.charAt(i);
+      
+      if(ch == '+' ||  ch == '-' || ch == '*' || ch == '/'){
+        int val2 = valuestack.pop();
+        int val1 = valuestack.pop();
+        int val = operation(val1, val2, ch);
+        valuestack.push(val);
+        
+        String ival2 = infix.pop();
+        String ival1 = infix.pop();
+        String ival = "(" + ival1 + ch + ival2 + ")";
+        infix.push(ival);
+        
+        String pval2 = prefix.pop();
+        String pval1 = prefix.pop();
+        String pval =  ch + pval1 + pval2 ;
+        prefix.push(pval);
+      } 
+      
+      else{
+          valuestack.push(ch - '0');
+          infix.push(ch + "");
+          prefix.push(ch + "");
+      }
+    }
+    
+    System.out.println(valuestack.pop());
+    System.out.println(infix.pop());
+    System.out.println(prefix.pop());
+  }
+  
+  public static int operation(int val1, int val2, char op){
+      if(op == '+'){
+        return val1 + val2;  
+      }
+      else if(op == '-'){
+        return val1 - val2;  
+      }
+      else if(op == '*'){
+        return val1 * val2;
+      }
+      else{
+        return val1 / val2;  
+      }
+  }
+}
